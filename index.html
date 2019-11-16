@@ -9,6 +9,7 @@
 </head>
 
 <body class="bodystyle">
+
   <div class="headline">
     <button type="button" name="button" class="btnstyle" onclick="window.location.href='/login.html'">Logout</button>
     <span class="titlestyle">Safe Home</span>
@@ -22,14 +23,17 @@
       var t=d.toLocaleTimeString();
       document.getElementById("clock").innerHTML=t;
     }
-    
+    function show_verify_dialog(){
+      var dialog = document.getElementById("mask");
+      dialog.style.display="inline";
+    } 
     </script>
   <div class="accountstyle">
     <h1 class="cardtitle">account</h1>
     <div class="info" id="accountinfo">
     </div>
 
-    <button type="button" name="button" class="cardbtn" id="btn1" onclick="">detail</button>
+    <button type="button" name="button" class="cardbtn" id="btn1" onclick="show_verify_dialog()">detail</button>
 
   </div>
   <div class="switchstyle">
@@ -49,7 +53,14 @@
     <button type="button" name="button" class="cardbtn">detail</button>
 
   </div>
-
+  <div class="mask" id="mask">
+  <div class="verifydialog" id="verifydialog">
+    <h3 style="margin: 10px 0px;">please enter password</h3>
+      <label for="password">password:</label>
+      <input type="password" id="password">
+      <input type="button" value="verify" class="verifybtn">
+    </div>
+  </div>
 </body>
 
 </html>
