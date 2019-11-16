@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>safe home</title>
+  <link rel="stylesheet" href="index.css">
+
+</head>
+
+<body class="bodystyle">
+  <div class="headline">
+    <button type="button" name="button" class="btnstyle" onclick="window.location.href='/login.html'">Logout</button>
+    <span class="titlestyle">Safe Home</span>
+    <span class="timelinestyle" id="clock"></span>
+  </div>
+  <script type="text/javascript">
+    var int=self.setInterval("clock()",1000);
+    function clock()
+    {
+      var d=new Date();
+      var t=d.toLocaleTimeString();
+      document.getElementById("clock").innerHTML=t;
+    }
+    
+    </script>
+  <div class="accountstyle">
+    <h1 class="cardtitle">account</h1>
+    <div class="info" id="accountinfo">
+    </div>
+
+    <button type="button" name="button" class="cardbtn" id="btn1" onclick="">detail</button>
+
+  </div>
+  <div class="switchstyle">
+    <h1 class="cardtitle">switch</h1>
+    <div class="info">
+      <span>device:</span>
+    </div>
+    <button type="button" name="button" class="cardbtn">detail</button>
+  </div>
+  <div class="temperaturestyle">
+    <h1 class="cardtitle">temperature</h1>
+    <button type="button" name="button" class="cardbtn">detail</button>
+
+  </div>
+  <div class="camerastyle">
+    <h1 class="cardtitle">camera</h1>
+    <button type="button" name="button" class="cardbtn">detail</button>
+
+  </div>
+
+</body>
+
+</html>
+

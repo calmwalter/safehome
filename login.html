@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>login</title>
+  <link rel="stylesheet" href="login.css">
+  <script src="jquery-3.4.1.js" charset="utf-8"></script>
+</head>
+
+<body class="bodystyle">
+  <form class="formstyle" action="http://localhost:5678/index.html" method="post">
+    <h1>Login</h1>
+    <div class="txtb">
+      <input type="text" name="name" required=true>
+      <span data-placeholder="Username"></span>
+    </div>
+
+    <div class="txtb">
+      <input type="password" name="password" required=true>
+      <span data-placeholder="Password"></span>
+    </div>
+    <input type="submit" name="submit" value="Login" class="logbtn">
+
+  </form>
+  <script type="text/javascript">
+    $(".txtb input").on("focus",function(){
+      $(this).addClass("focus");
+    });
+
+    $(".txtb input").on("blur",function(){
+      if($(this).val()=="")
+      $(this).removeClass("focus");
+    });
+
+  </script>
+</body>
+
+</html>
