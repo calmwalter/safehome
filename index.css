@@ -127,7 +127,7 @@
 
   background:linear-gradient(to right,#3498db,#FFEB3B);
   width: 500px;
-  height: 100px;
+  height: 140px;
   border-radius: 20px;
   text-align: center;
 }
@@ -136,6 +136,7 @@
   position: relative;
   width: 80px;
   border-radius: 10px;
+  margin: 0px 20px;
   outline: none;
   background: linear-gradient(120deg, #3498db, #8e44ad);
   background-size: 200%;
@@ -158,4 +159,42 @@
   height: 100%;
   position: absolute;
   background: rgba(0,0,0,0.8);
+}
+
+
+.cancelbtn{
+  position: relative;
+  width: 80px;
+  margin: 0px 20px;
+
+  border-radius: 10px;
+  outline: none;
+  background: linear-gradient(120deg, #F44336, #8e44ad);
+  background-size: 200%;
+  border: none;
+  font-size: 20px;
+  transition: .5s;
+  cursor: pointer;
+}
+
+.cancelbtn:hover{
+  background-position: right;
+}
+
+.input{
+  border: none;
+  outline: none;
+  margin: 5px 0px;
+  text-align: center;
+  border-radius: 10px ;
+  width: 50%;
+  font-size: 18px;
+  color: #000;
+  background: linear-gradient(to right, #FFEB3B,#4CAF50,#3498db);
+  background-size: 200%;
+  transition: .5s;
+}
+
+.input:focus{
+  background-position: right;
 }

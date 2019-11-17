@@ -4,7 +4,7 @@
 .bodystyle{
     background: url("background.jpg"); 
     min-width: 1100px;
-    min-height: 800px;
+    min-height: 850px;
 }
 .headline{
     min-width: 1000px;
@@ -22,12 +22,12 @@
 .info{
     position: absolute;
     background: linear-gradient(to right,#673AB7,#2196F3);
-    top: 5%;
-    bottom: 10%;
-    left: 2.5%;
-    right: 77.5%;
+    top: 50px;
+    left: 40px;
+    bottom: 40px;
+    
     min-width: 250px;
-    min-height: 700px;
+    min-height: 800px;
     border-radius: 20px;
     text-align: center;
     opacity: 0.9;
@@ -35,16 +35,16 @@
 
 .graph{
     position: absolute;
-    left: 25%;
-    top: 5%;
-    bottom: 10%;
+    left: 310px;
+    top: 50px;
     right: 2.5%;
-    min-width: 700px;
-    min-height: 700px;
-    
+    min-width: 1000px;
+    min-height: 800px;
+    bottom: 40px;
+
     border-radius: 20px;
     background: #FFEB3B;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 .btn1{
@@ -86,8 +86,14 @@
     color: #212121;
     text-align: center;
     font-size: 20px;
+    background: linear-gradient(to right, #FFEB3B,#4CAF50,#3498db);
+    background-size: 200%;
+    transition: .5s;
 }
+.name:focus{
+    background-position: right;
 
+}
 .password{
     position: relative;
     width: 90%;
@@ -100,8 +106,13 @@
     border-radius: 7px;
     color: #212121;
     background: #FFF9C4;
+    background: linear-gradient(to right, #FFEB3B,#4CAF50,#3498db);
+    background-size: 200%;
+    transition: .5s;
 }
-
+.password:focus{
+    background-position: right;
+}
 .btn2{
     position: relative;
     margin: 10px 0px;

@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <title>safe home</title>
   <link rel="stylesheet" href="index.css">
-
 </head>
 
 <body class="bodystyle">
@@ -16,21 +15,33 @@
     <span class="timelinestyle" id="clock"></span>
   </div>
   <script type="text/javascript">
-    var int=self.setInterval("clock()",1000);
-    function clock()
-    {
-      var d=new Date();
-      var t=d.toLocaleTimeString();
-      document.getElementById("clock").innerHTML=t;
+    var int = self.setInterval("clock()", 1000);
+    function clock() {
+      var d = new Date();
+      var t = d.toLocaleTimeString();
+      document.getElementById("clock").innerHTML = t;
     }
-    function show_verify_dialog(){
+    function show_verify_dialog() {
       var dialog = document.getElementById("mask");
-      dialog.style.display="inline";
-    } 
-    </script>
+      dialog.style.display = "inline";
+      document.getElementById('password').value = '';
+      getname();
+    }
+    function hide_verify_dialog() {
+      var dialog = document.getElementById("mask");
+      dialog.style.display = "none";
+    }
+    function getname() {
+      var name = document.getElementById('name');
+      var namevalue = document.getElementById('username').innerHTML;
+      name.value=namevalue.replace('User Name: ', '');
+    }
+  </script>
   <div class="accountstyle">
     <h1 class="cardtitle">account</h1>
     <div class="info" id="accountinfo">
+      <div id='username' class="accountinfostyle"></div>
+      <div id='lastlogintime' class="accountinfostyle"></div>
     </div>
 
     <button type="button" name="button" class="cardbtn" id="btn1" onclick="show_verify_dialog()">detail</button>
@@ -41,24 +52,31 @@
     <div class="info">
       <span>device:</span>
     </div>
-    <button type="button" name="button" class="cardbtn">detail</button>
+    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog()">detail</button>
   </div>
   <div class="temperaturestyle">
     <h1 class="cardtitle">temperature</h1>
-    <button type="button" name="button" class="cardbtn">detail</button>
+    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog()">detail</button>
 
   </div>
   <div class="camerastyle">
     <h1 class="cardtitle">camera</h1>
-    <button type="button" name="button" class="cardbtn">detail</button>
+    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog()">detail</button>
 
   </div>
   <div class="mask" id="mask">
-  <div class="verifydialog" id="verifydialog">
-    <h3 style="margin: 10px 0px;">please enter password</h3>
-      <label for="password">password:</label>
-      <input type="password" id="password">
-      <input type="button" value="verify" class="verifybtn">
+    <div class="verifydialog" id="verifydialog">
+      <form action="/account.html" method="post" target="_blank" onsubmit="hide_verify_dialog()">
+        <div style="margin: 10px 0px;">please enter password</div>
+        <div><input type="text" readonly=true class="input" id='name' name='name'></div>
+        <div>
+          <input type="password" id="password" class="input" required=true name="password">
+        </div>
+        <input type="submit" value="verify" class="verifybtn" name="submit">
+        <button class="cancelbtn" onclick="hide_verify_dialog()" type="button">cancel</button>
+      </form>
+
+
     </div>
   </div>
 </body>
