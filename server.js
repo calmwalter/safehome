@@ -91,7 +91,7 @@ http.createServer(function (req, res) {
 
         });
     }
-    else if (req.url == '/account.html' || req.url == '/switch.html' ||req.url == '/camera.html' || req.url == '/temperature.html') {
+    else if (req.url == '/account.html' || req.url == '/switch.html' || req.url == '/camera.html' || req.url == '/temperature.html') {
         // res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
         // 定义了一个post变量，用于暂存请求体的信息
         var post = '';
@@ -140,7 +140,7 @@ http.createServer(function (req, res) {
                         fs.readFile(req.url.replace(/\//, ''), function (err, data) {
                             if (err) return console.error(err);
                             res.write(data);
-                            res.write(insert_account_info(post_name, logintime));
+                            res.write(account_detail(post_name));
                             res.end();
 
                         });
@@ -150,6 +150,66 @@ http.createServer(function (req, res) {
                         res.write('<script>alert("Password error!");window.close();</script>');
                         res.end();
 
+                    }
+
+                });
+                connection.release();
+            });
+
+        });
+    }
+    else if (req.url == '/change') {
+        // res.writeHead(200, { 'Content-Type': 'text/html; charset=utf8' });
+        // 定义了一个post变量，用于暂存请求体的信息
+        var post = '';
+
+        // 通过req的data事件监听函数，每当接受到请求体的数据，就累加到post变量中
+        req.on('data', function (chunk) {
+            post += chunk;
+        });
+
+        // 在end事件触发后，通过querystring.parse将post解析为真正的POST请求格式，然后向客户端返回。
+        req.on('end', function () {
+
+            post = querystring.parse(post);
+            console.log(post);
+            if (Object.keys(post).length == 0) {
+                res.statusCode = 404;
+                res.end();
+                return console.log("no password, close the page.");
+            }
+            var post_name = post.name;
+            var post_password = post.password;
+            var post_newpassword = post.newpassword;
+            //console.log(post.name);
+
+
+            pool.getConnection(function (err, connection) {
+                if (err) return console.error(err);
+                var sql = 'SELECT * from account where name=' + '\"' + post_name + '\"';
+                connection.query(sql, function (error, results, fields) {
+                    if (error) return console.error(error);
+                    var name_exist = true;
+                    if (results.length == 0) {
+                        name_exist = false;
+                    }
+                    else {
+                        //console.log(results);
+                        var password = results[0].password;
+                    }
+                    if (name_exist && password == post_password) {
+                        console.log(post_name, "password correct");
+                        //update mysql last login time 
+                        update_sql_password(post_name, post_newpassword);
+                        //write the main page
+                        res.write('<script>alert("change successfully!");</script>');
+                        
+                        res.end();
+                        //res.end("sucess");
+                    }
+                    else {
+                        res.write('<script>alert("Password error!");</script>');
+                        res.end();
                     }
 
                 });
@@ -176,7 +236,13 @@ http.createServer(function (req, res) {
         });
     }
 }).listen(5678);
-
+function account_detail(name) {
+    userinfo = '<script>window.onload=function(){' +
+        'document.getElementById("username").value="' + name + '";' +
+        '};</script>';
+    //console.log(userinfo);
+    return userinfo;
+}
 function insert_account_info(name, logintime) {
     userinfo = '<script>window.onload=function(){' +
         'document.getElementById("username").innerHTML="User Name: "+"' + name + '";' +
@@ -200,13 +266,26 @@ function update_sql_time(name) {
         var time_sql = 'update account set lastlogintime=\"' + time + '\" where name=' + '\"' + name + '\"';
         connection.query(time_sql, function (err, results, fields) {
             if (err) return console.error(err);
-            console.log("last login time updated:");
+            console.log("last login time updated");
         });
         var time_sql = 'insert into loginrecord(name,time) values(\"' + name + '\",\"' + time + '\")';
         connection.query(time_sql, function (err, results, fields) {
             if (err) return console.error(err);
-            console.log("login record updated:");
+            console.log("login record updated");
         });
         connection.release();
     });
+}
+
+function update_sql_password(name, password) {
+    pool.getConnection(function (err, connection) {
+        if (err) return console.error(err);
+        var time_sql = 'update account set password=\"' + password + '\" where name=' + '\"' + name + '\"';
+        connection.query(time_sql, function (err, results, fields) {
+            if (err) return console.error(err);
+            console.log(name, "password updated");
+        });
+        connection.release();
+    });
+
 }

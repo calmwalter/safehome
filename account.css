@@ -26,7 +26,7 @@
     left: 40px;
     bottom: 40px;
     
-    min-width: 250px;
+    width: 250px;
     min-height: 800px;
     border-radius: 20px;
     text-align: center;
@@ -88,11 +88,7 @@
     font-size: 20px;
     background: linear-gradient(to right, #FFEB3B,#4CAF50,#3498db);
     background-size: 200%;
-    transition: .5s;
-}
-.name:focus{
     background-position: right;
-
 }
 .password{
     position: relative;
@@ -146,3 +142,93 @@
 .btn3:hover{
     background-position: right;
 }
+
+.verifydialog{
+    top: 40%;
+    position: absolute;
+    left: 35%;
+  
+    background:linear-gradient(to right,#3498db,#FFEB3B);
+    width: 500px;
+    height: 140px;
+    border-radius: 20px;
+    text-align: center;
+  }
+  
+  .verifybtn{
+    position: relative;
+    width: 80px;
+    border-radius: 10px;
+    margin: 0px 20px;
+    outline: none;
+    background: linear-gradient(120deg, #3498db, #8e44ad);
+    background-size: 200%;
+    border: none;
+    font-size: 20px;
+    transition: .5s;
+    cursor: pointer;
+  }
+  
+  .verifybtn:hover{
+    background-position: right;
+  }
+  
+  
+  .mask{
+    text-align: center;
+  
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: rgba(0,0,0,0.8);
+  }
+  
+  
+  .cancelbtn{
+    position: relative;
+    width: 80px;
+    margin: 0px 20px;
+  
+    border-radius: 10px;
+    outline: none;
+    background: linear-gradient(120deg, #F44336, #8e44ad);
+    background-size: 200%;
+    border: none;
+    font-size: 20px;
+    transition: .5s;
+    cursor: pointer;
+  }
+  
+  .cancelbtn:hover{
+    background-position: right;
+  }
+  
+  .input{
+    border: none;
+    outline: none;
+    margin: 5px 0px;
+    text-align: center;
+    border-radius: 10px ;
+    width: 50%;
+    font-size: 18px;
+    color: #000;
+    background: linear-gradient(to right, #FFEB3B,#4CAF50,#3498db);
+    background-size: 200%;
+    transition: .5s;
+  }
+  
+  .input:focus{
+    background-position: right;
+  }
+
+  .tipstyle{
+    position: relative;
+    color: red;
+    font-weight: 900;
+	width: 100%;  
+    height: auto;  
+    word-wrap:break-word;  
+    word-break:break-all;  
+    overflow: hidden;  
+  }

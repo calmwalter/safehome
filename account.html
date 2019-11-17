@@ -10,6 +10,7 @@
 </head>
 
 <body class="bodystyle">
+    <iframe src="" frameborder="0" name="alert"></iframe>
     <div class="headline">
         <span class="lstlogintime"></span>
         <span class="clock" id="clock">time</span>
@@ -20,43 +21,97 @@
                 var t = d.toLocaleTimeString();
                 document.getElementById("clock").innerHTML = t;
             }
+            function show_verify_dialog() {
+                var dialog = document.getElementById("mask");
+                dialog.style.display = "inline";
+                document.getElementById('password').value = '';
+                getname();
+            }
+            function hide_verify_dialog() {
+                var dialog = document.getElementById("mask");
+                dialog.style.display = "none";
+            }
+            function getname() {
+                var name = document.getElementById('name');
+                var namevalue = document.getElementById('username').innerHTML;
+                name.value = namevalue;
+            }
+            function check(){
+                var changebtn = document.getElementById("changebtn");
+                var oldpassword = document.getElementById("oldpassword");
+                var newpassword = document.getElementById("newpassword");
+                var verifynewpassword = document.getElementById("verifynewpassword");
+                var tip = document.getElementById("tip");
+                if(oldpassword.value==''){
+                    changebtn.disabled = true;
+                    tip.innerHTML="password can not be empty";
+                    return;
+                }
+                if(newpassword.value=='' || verifynewpassword.value==''){
+                    changebtn.disabled = true;
+                    tip.innerHTML="new password and verify password can not be empty";
+                    return;
+                }
+                if(newpassword.value != verifynewpassword.value){
+                    changebtn.disabled = true;
+                    tip.innerHTML="new password and verify password are not same";
+                    return;
+                }
+                changebtn.disabled = false;
+                    tip.innerHTML="Satisfied.";
+            }
         </script>
         <button class="btn1" onclick="window.close()">cancel</button>
     </div>
-
-    <form action="/change">
-        <div class="info">
+    <div class="info">
+        <form action="/change" method="post" target="alert">
             <div>
                 <h1>infomation</h1>
             </div>
             <img src="favicon.ico" alt="">
             <div style="margin: 10px 0px;">
                 <div>name</div>
-                <input type="text" class="name">
+                <input type="text" class="name" name="name" readonly='readonly' id="username">
             </div>
             <div style="margin: 10px 0px;">
                 <div>old password</div>
-                <input type="password" class="password" required=true>
+                <input type="password" class="password" required=true name="password" onchange="check()" id="oldpassword">
             </div>
             <div style="margin: 10px 0px;">
                 <div>new password</div>
-                <input type="password" class="password">
+                <input type="password" class="password" required=true name="newpassword" onchange="check()" id="newpassword">
             </div>
             <div style="margin: 10px 0px;">
                 <div>verify your new password</div>
-                <input type="password" class="password">
+                <input type="password" class="password" required=true  id="verifynewpassword" onchange="check()">
             </div>
-            <input type="submit" value="change" class="btn2">
+            <input type="submit" value="change" class="btn2" id="changebtn" disabled=true>
             
-            <div style="position: absolute;bottom: 20px;width: 100%;">
-                <input type="submit" value="login record" class="btn3">
-                <input type="submit" value="Permission statement" class="btn3">
-            </div>
+        </form>
+        <div id="tip" class="tipstyle"></div>
+        <div style="position: absolute;bottom: 20px;width: 100%;">
+            <button type="button" onclick="show_verify_dialog('loginrecord')" class="btn3">login record</button>
+            <button type="button" onclick="show_verify_dialog('permissionstatement')" class="btn3">Permission statement</button>
         </div>
-    </form>
+    </div>
+    <div class="graph">
+        <iframe src="" frameborder="0" name="graph"></iframe>
+    </div>
+    <div class="mask" id="mask">
+        <div class="verifydialog" id="verifydialog">
+            <form action="/loginrecord" method="post" target="_blank" onsubmit="hide_verify_dialog()">
+                <div style="margin: 10px 0px;">please enter password</div>
+                <div><input type="text" readonly=true class="input" id='name' name='name'></div>
+                <div>
+                    <input type="password" id="password" class="input" required=true name="password">
+                </div>
+                <input type="submit" value="verify" class="verifybtn" name="submit">
+                <button class="cancelbtn" onclick="hide_verify_dialog()" type="button">cancel</button>
+            </form>
 
 
-    <div class="graph"></div>
+        </div>
+    </div>
 </body>
 
 </html>
