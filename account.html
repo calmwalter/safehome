@@ -16,49 +16,55 @@
         <span class="clock" id="clock">time</span>
         <script type="text/javascript">
             var int = self.setInterval("clock()", 1000);
+
             function clock() {
                 var d = new Date();
                 var t = d.toLocaleTimeString();
                 document.getElementById("clock").innerHTML = t;
             }
-            function show_verify_dialog() {
+
+            function show_verify_dialog(event) {
                 var dialog = document.getElementById("mask");
                 dialog.style.display = "inline";
                 document.getElementById('password').value = '';
                 getname();
+                document.getElementById('event').value = event;
             }
+
             function hide_verify_dialog() {
                 var dialog = document.getElementById("mask");
                 dialog.style.display = "none";
             }
+
             function getname() {
                 var name = document.getElementById('name');
-                var namevalue = document.getElementById('username').innerHTML;
+                var namevalue = document.getElementById('username').value;
                 name.value = namevalue;
             }
-            function check(){
+
+            function check() {
                 var changebtn = document.getElementById("changebtn");
                 var oldpassword = document.getElementById("oldpassword");
                 var newpassword = document.getElementById("newpassword");
                 var verifynewpassword = document.getElementById("verifynewpassword");
                 var tip = document.getElementById("tip");
-                if(oldpassword.value==''){
+                if (oldpassword.value == '') {
                     changebtn.disabled = true;
-                    tip.innerHTML="password can not be empty";
+                    tip.innerHTML = "password can not be empty";
                     return;
                 }
-                if(newpassword.value=='' || verifynewpassword.value==''){
+                if (newpassword.value == '' || verifynewpassword.value == '') {
                     changebtn.disabled = true;
-                    tip.innerHTML="new password and verify password can not be empty";
+                    tip.innerHTML = "new password and verify password can not be empty";
                     return;
                 }
-                if(newpassword.value != verifynewpassword.value){
+                if (newpassword.value != verifynewpassword.value) {
                     changebtn.disabled = true;
-                    tip.innerHTML="new password and verify password are not same";
+                    tip.innerHTML = "new password and verify password are not same";
                     return;
                 }
                 changebtn.disabled = false;
-                    tip.innerHTML="Satisfied.";
+                tip.innerHTML = "Satisfied.";
             }
         </script>
         <button class="btn1" onclick="window.close()">cancel</button>
@@ -75,34 +81,42 @@
             </div>
             <div style="margin: 10px 0px;">
                 <div>old password</div>
-                <input type="password" class="password" required=true name="password" onchange="check()" id="oldpassword">
+                <input type="password" class="password" required=true name="password" onchange="check()"
+                    id="oldpassword">
             </div>
             <div style="margin: 10px 0px;">
                 <div>new password</div>
-                <input type="password" class="password" required=true name="newpassword" onchange="check()" id="newpassword">
+                <input type="password" class="password" required=true name="newpassword" onchange="check()"
+                    id="newpassword">
             </div>
             <div style="margin: 10px 0px;">
                 <div>verify your new password</div>
-                <input type="password" class="password" required=true  id="verifynewpassword" onchange="check()">
+                <input type="password" class="password" required=true id="verifynewpassword" onchange="check()">
             </div>
             <input type="submit" value="change" class="btn2" id="changebtn" disabled=true>
-            
+
         </form>
         <div id="tip" class="tipstyle"></div>
         <div style="position: absolute;bottom: 20px;width: 100%;">
             <button type="button" onclick="show_verify_dialog('loginrecord')" class="btn3">login record</button>
-            <button type="button" onclick="show_verify_dialog('permissionstatement')" class="btn3">Permission statement</button>
+            <button type="button" onclick="show_verify_dialog('permissionstatement')" class="btn3">Permission
+                statement</button>
         </div>
     </div>
-    <div class="graph">
-        <iframe src="" frameborder="0" name="graph"></iframe>
-    </div>
+    <div class="graph" ><iframe src="" frameborder="0" name="graph" class="graphframe"></iframe></div>
+
     <div class="mask" id="mask">
         <div class="verifydialog" id="verifydialog">
-            <form action="/loginrecord" method="post" target="_blank" onsubmit="hide_verify_dialog()">
-                <div style="margin: 10px 0px;">please enter password</div>
-                <div><input type="text" readonly=true class="input" id='name' name='name'></div>
+            <form action="/query" method="post" target="graph" onsubmit="hide_verify_dialog()">
                 <div>
+                    <label for="name">name<br></label>
+                    <input type="text" readonly=true class="input_name" id='name' name='name'>
+                </div>
+                <div>
+                    <label for="event">event<br></label>
+                    <input type="text" readonly=true class="input_event" id='event' name='event' value=""></div>
+                <div>
+                    <label for="password">password<br></label>
                     <input type="password" id="password" class="input" required=true name="password">
                 </div>
                 <input type="submit" value="verify" class="verifybtn" name="submit">
