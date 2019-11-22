@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <img src="" style="position: absolute;left: 0px;right: 0px;margin: auto;top: 0px;bottom: 0px;width: 100%;height: 100%;">
+    <button style="position: absolute;right: 0px;bottom: 0px;border: none;outline: none;font-size: 30px;background:linear-gradient(to right,#3498db,#8e44ad);" onclick="window.close()">close</button>
+    <script>
+        // get img dom element
+        const img = document.querySelector('img');
+        const WS_URL = 'ws://'+document.domain+':50114';
+        const ws = new WebSocket(WS_URL);
+        ws.onopen = () => console.log(`Connected to ${WS_URL}`);
+        ws.onmessage = message => {
+            // set the base64 string to the src tag of the image
+            img.src = message.data;
+        }
+    </script>
+</body>
+</html>
