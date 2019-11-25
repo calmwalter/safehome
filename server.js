@@ -36,12 +36,12 @@ http.createServer(function (req, res) {
                     res.write(data);
                     res.end();
                 });
-                return console.log("login failed, redirect to login page.");
+                return ;
             }
             var post_name = post.name;
             var post_password = post.password;
 
-            //console.log(post.name);
+            
 
 
             pool.getConnection(function (err, connection) {
@@ -55,15 +55,13 @@ http.createServer(function (req, res) {
                         name_exist = false;
                     }
                     else {
-                        //console.log(results);
                         var password = results[0].password;
                         var logintime = results[0].lastlogintime;
                     }
                     if (name_exist && password == post_password) {
 
-                        console.log(post_name, "login sucess");
                         //update mysql last login time
-                        update_sql_time(post_name);
+                        update_sql_time(post_name,"login");
                         //write the main page
                         fs.readFile('index.html', function (err, data) {
                             if (err) return console.error(err);
@@ -105,16 +103,13 @@ http.createServer(function (req, res) {
         req.on('end', function () {
 
             post = querystring.parse(post);
-            console.log(post);
             if (Object.keys(post).length == 0) {
                 res.statusCode = 404;
                 res.end();
-                return console.log("no password, close the page.");
+                return ;
             }
             var post_name = post.name;
             var post_password = post.password;
-
-            //console.log(post.name);
 
 
             pool.getConnection(function (err, connection) {
@@ -127,15 +122,11 @@ http.createServer(function (req, res) {
                         name_exist = false;
                     }
                     else {
-                        //console.log(results);
                         var password = results[0].password;
                         var logintime = results[0].lastlogintime;
                     }
                     if (name_exist && password == post_password) {
 
-                        console.log(post_name, "password correct");
-                        //update mysql last login time
-                        update_sql_time(post_name);
                         //write the main page
                         fs.readFile(req.url.replace(/\//, ''), function (err, data) {
                             if (err) return console.error(err);
@@ -172,16 +163,14 @@ http.createServer(function (req, res) {
         req.on('end', function () {
 
             post = querystring.parse(post);
-            console.log(post);
             if (Object.keys(post).length == 0) {
                 res.statusCode = 404;
                 res.end();
-                return console.log("no password, close the page.");
+                return ;
             }
             var post_name = post.name;
             var post_password = post.password;
             var post_newpassword = post.newpassword;
-            //console.log(post.name);
 
 
             pool.getConnection(function (err, connection) {
@@ -194,13 +183,11 @@ http.createServer(function (req, res) {
                         name_exist = false;
                     }
                     else {
-                        //console.log(results);
                         var password = results[0].password;
                     }
                     if (name_exist && password == post_password) {
-                        console.log(post_name, "password correct");
                         //update mysql last login time 
-                        update_sql_password(post_name, post_newpassword);
+                        update_sql_password(post_name, post_newpassword,"password update");
                         //write the main page
                         res.write('<script>alert("change successfully!");</script>');
 
@@ -232,16 +219,14 @@ http.createServer(function (req, res) {
         req.on('end', function () {
 
             post = querystring.parse(post);
-            console.log(post);
             if (Object.keys(post).length == 0) {
                 res.statusCode = 404;
                 res.end();
-                return console.log("no password, close the page.");
+                return ;
             }
             var post_name = post.name;
             var post_password = post.password;
             var post_event = post.event;
-            //console.log(post.name);
 
 
             pool.getConnection(function (err, connection) {
@@ -254,25 +239,30 @@ http.createServer(function (req, res) {
                         name_exist = false;
                     }
                     else {
-                        //console.log(results);
                         var password = results[0].password;
                     }
                     if (name_exist && password == post_password) {
-                        console.log(post_name, "password correct");
-                        if (event == 'loginrecord') {
+                        if (post_event == 'loginrecord') {
                             pool.getConnection(function (err, connection) {
                                 if (err) return console.error(err);
+                                var time = get_current_time();
+                                var time_sql = 'insert into loginrecord(name,time,event) values(\"' + post_name + '\",\"' + time +'\",\"' + "access login record" + '\")';
+                                connection.query(time_sql, function (err, results, fields) {
+                                    if (err) return console.error(err);
+                                });
+                                console.log(post_name, "access login record",time);
+
                                 var time_sql = 'SELECT * from loginrecord where name=' + '\"' + post_name + '\"';
                                 connection.query(time_sql, function (err, results, fields) {
                                     if (err) return console.error(err);
                                     var i = 0, len = results.length;
-                                    var data = '<table style="border:1px solid #0094ff;left:30px;position:absolute;text-align:center;"><tr>' + '<th>' + 'number' + '</th>' + '<th>' + 'time' + '</th>' + '<th>' + 'event' + '</th>' + '<tr>';
+                                    var data = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><title>Document</title></head><body">'+'<table style="border:2px solid black;border-collapse:collapse;width:100%;height:100%;text-align:center;"><tr style="border:2px solid black;border-collapse:collapse;">' + '<th style="border:2px solid black;border-collapse:collapse;">' + 'number' + '</th>' + '<th style="border:2px solid black;border-collapse:collapse;">' + 'time' + '</th>' + '<th style="border:2px solid black;border-collapse:collapse;">' + 'event' + '</th>' + '</tr>';
                                     for (i; i < len; i++) {
                                         var time = results[i].time;
                                         var event = results[i].event;
-                                        data = data + '<tr>' + '<td>' + i + '</td>' + '<td>' + time + '</td>' + '<td>' + event + '</td></tr>';
+                                        data = data + '<tr style="border:2px solid black;border-collapse:collapse;">' + '<td style="border:2px solid black;border-collapse:collapse;">' + i + '</td>' + '<td style="border:2px solid black;border-collapse:collapse;">' + time + '</td>' + '<td style="border:2px solid black;border-collapse:collapse;">' + event + '</td></tr>';
                                     }
-                                    data = data + '</table>';
+                                    data = data + '</table></body></html>';
                                     res.write(data);
                                     res.end();
 
@@ -309,15 +299,13 @@ http.createServer(function (req, res) {
         req.on('end', function () {
 
             post = querystring.parse(post);
-            console.log(post);
             if (Object.keys(post).length == 0) {
                 res.statusCode = 404;
                 res.end();
-                return console.log("no password, close the page.");
+                return ;
             }
             var post_name = post.name;
             var post_password = post.password;
-            //console.log(post.name);
 
 
             pool.getConnection(function (err, connection) {
@@ -330,11 +318,9 @@ http.createServer(function (req, res) {
                         name_exist = false;
                     }
                     else {
-                        //console.log(results);
                         var password = results[0].password;
                     }
                     if (name_exist && password == post_password) {
-                        console.log(post_name, "password correct");
                         fs.readFile('client.html', function (err, data) {
                             if (err) return console.error(err);
                             res.write(data);
@@ -347,6 +333,13 @@ http.createServer(function (req, res) {
                     }
 
                 });
+                var time = get_current_time();
+                var time_sql = 'insert into loginrecord(name,time,event) values(\"' + post_name + '\",\"' + time +'\",\"' + "access camera" + '\")';
+                connection.query(time_sql, function (err, results, fields) {
+                    if (err) return console.error(err);
+                    
+                });
+                console.log(post_name, "access camera",time);
                 connection.release();
             });
 
@@ -374,7 +367,6 @@ function account_detail(name) {
     userinfo = '<script>window.onload=function(){' +
         'document.getElementById("username").value="' + name + '";' +
         '};</script>';
-    //console.log(userinfo);
     return userinfo;
 }
 function insert_account_info(name, logintime) {
@@ -382,43 +374,49 @@ function insert_account_info(name, logintime) {
         'document.getElementById("username").innerHTML="User Name: "+"' + name + '";' +
         'document.getElementById("lastlogintime").innerHTML="Last Login Time: "+"' + logintime + '";' +
         '};</script>';
-    //console.log(userinfo);
     return userinfo;
 
 }
 
 function get_current_time() {
     var time = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
-    //console.log(time);
     return time;
 }
 
-function update_sql_time(name) {
+function update_sql_time(name,event) {
     var time = get_current_time();
     pool.getConnection(function (err, connection) {
         if (err) return console.error(err);
         var time_sql = 'update account set lastlogintime=\"' + time + '\" where name=' + '\"' + name + '\"';
         connection.query(time_sql, function (err, results, fields) {
             if (err) return console.error(err);
-            console.log("last login time updated");
+            
         });
-        var time_sql = 'insert into loginrecord(name,time) values(\"' + name + '\",\"' + time + '\")';
+        var time_sql = 'insert into loginrecord(name,time,event) values(\"' + name + '\",\"' + time +'\",\"' + event + '\")';
         connection.query(time_sql, function (err, results, fields) {
             if (err) return console.error(err);
-            console.log("login record updated");
+            
         });
         connection.release();
+        console.log(name,"login",time);
     });
 }
 
-function update_sql_password(name, password) {
+function update_sql_password(name, password,event) {
+    var time = get_current_time();
     pool.getConnection(function (err, connection) {
         if (err) return console.error(err);
         var time_sql = 'update account set password=\"' + password + '\" where name=' + '\"' + name + '\"';
         connection.query(time_sql, function (err, results, fields) {
             if (err) return console.error(err);
-            console.log(name, "password updated");
+            
         });
+        var time_sql = 'insert into loginrecord(name,time,event) values(\"' + name + '\",\"' + time +'\",\"' + event + '\")';
+        connection.query(time_sql, function (err, results, fields) {
+            if (err) return console.error(err);
+            
+        });
+        console.log(name, "password update",time);
         connection.release();
     });
 
