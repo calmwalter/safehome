@@ -17,9 +17,10 @@
         // request access to webcam
         navigator.mediaDevices.getUserMedia({
             video: {
-                width: 426,
+                width: 480,
                 height: 240
-            }
+            },
+            audio: false
         }).then((stream) => video.srcObject = stream);
 
         // returns a frame encoded in base64
@@ -28,11 +29,11 @@
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
-            const data = canvas.toDataURL('image/jpeg');
+            const data = canvas.toDataURL('image/jpeg',0.5);
             return data;
         }
         const WS_URL = 'ws://localhost:3001';
-        const FPS = 24;
+        const FPS = 30;
         const ws = new WebSocket(WS_URL);
         ws.onopen = () => {
             console.log(`Connected to ${WS_URL}`);
