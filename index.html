@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>safe home</title>
   <link rel="stylesheet" href="index.css">
+  <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
 </head>
 
 <body class="bodystyle">
@@ -42,6 +44,48 @@
       var namevalue = document.getElementById('username').innerHTML;
       name.value = namevalue.replace('User Name: ', '');
     }
+    $(window).load(
+      function () {
+        var name = sessionStorage.getItem('user');
+        //get user infomation
+        $.post("get_user_info", {
+          name: name
+        }, function (data) {
+          alert(data);
+        });
+        //get temperature infomation
+        $.post("/weather", {
+          name: name
+        }, function (data) {
+          cityname = document.getElementById('cityname');
+          temp = document.getElementById('temp');
+          tempn = document.getElementById('tempn');
+          weather = document.getElementById('weather');
+          wd = document.getElementById('wd');
+          ws = document.getElementById('ws');
+          fctime = document.getElementById('fctime');
+          cityname.innerHTML = "city:" + data.cityname;
+          temp.innerHTML = "max temperature:" + data.temp;
+          tempn.innerHTML = "max temperature:" + data.tempn;
+          weather.innerHTML = "wether:" + data.weather;
+          wd.innerHTML = "wd:" + data.wd;
+          ws.innerHTML = "ws:" + data.ws;
+          fctime.innerHTML = "observe time:" + data.fctime;
+        }, 'json');
+        //get switch infomation
+        $.post("/switch", {
+          name: name
+        }, function (data) {
+          alert(data);
+        });
+        //get camera infomation
+        $.post("/camera", {
+          name: name
+        }, function (data) {
+          alert(data);
+        });
+      }
+    );
   </script>
   <div class="accountstyle">
     <h1 class="cardtitle">account</h1>
@@ -59,17 +103,26 @@
     <div class="info">
       <span>device:</span>
     </div>
-    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog('switch.html')">detail</button>
+    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog('switch.html')"
+      disabled=true>detail</button>
   </div>
   <div class="temperaturestyle">
     <h1 class="cardtitle">temperature</h1>
+    <div id="cityname" style="text-align: center;margin-top: 10px;"></div>
+    <div id="temp" style="text-align: center;margin-top: 10px;"></div>
+    <div id="tempn" style="text-align: center;margin-top: 10px;"></div>
+    <div id="weather" style="text-align: center;margin-top: 10px;"></div>
+    <div id="wd" style="text-align: center;margin-top: 10px;"></div>
+    <div id="ws" style="text-align: center;margin-top: 10px;"></div>
+    <div id="fctime" style="text-align: center;margin-top: 10px;"></div>
     <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog('temperature.html')">detail</button>
-
   </div>
   <div class="camerastyle">
     <h1 class="cardtitle">camera</h1>
-    <button type="button" name="button" class="cardbtn" onclick="show_verify_dialog('client.html')">detail</button>
-
+    <div style="text-align: center;margin-top: 30px;font-size: x-large;">1 device available<br>no emergency
+      event<br>state: safe</div>
+    <button type="button" name="button" class="cardbtn"
+      onclick="show_verify_dialog('test_for_rtmp.html')">detail</button>
   </div>
   <div class="mask" id="mask">
     <div class="verifydialog" id="verifydialog">

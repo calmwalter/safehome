@@ -12,7 +12,7 @@
   <form class="formstyle" action="/index.html" method="post">
     <h1>Login</h1>
     <div class="txtb">
-      <input type="text" name="name" required=true>
+      <input type="text" name="name" required=true id="username" value="">
       <span data-placeholder="Username"></span>
     </div>
 
@@ -20,7 +20,7 @@
       <input type="password" name="password" required=true>
       <span data-placeholder="Password"></span>
     </div>
-    <input type="submit" name="submit" value="Login" class="logbtn">
+    <input type="submit" name="submit" value="Login" class="logbtn" onclick="setstore()">
 
   </form>
   <script type="text/javascript">
@@ -32,7 +32,10 @@
       if($(this).val()=="")
       $(this).removeClass("focus");
     });
-
+    function setstore() {
+      name = document.getElementById("username").value;
+      sessionStorage.setItem('user',name);
+    }
   </script>
 </body>
 

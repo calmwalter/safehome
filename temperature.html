@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="highcharts.js"></script>
+    <script src="exporting.js"></script>
+    <script src="oldie.js"></script>
+    <script src="highcharts-zh_CN.js"></script>
+    <script src="data.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <p style="width: 100%;text-align: center;">数据表格</p>
+    <table id="datatable" style="border:2px solid black;border-collapse:collapse;width:100%;height:100%;text-align:center;"></table>
+
+        
+
+
+
+    <script>
+        $(window).load(
+            function () {
+                var name = sessionStorage.getItem('user');
+                var temp_data = [];
+                var tempn_data = [];
+                var x_data = [];
+                //get temperature infomation
+                $.post("/temperature_data", {
+                    name: name
+                }, function (data) {
+                    // console.log(data);
+                    var datatable = document.getElementById('datatable');
+                    for (let i = 0; i < data.length; i++) {
+
+                        let d = data[i];
+                        temp_data.push(parseInt(d.temp));
+                        tempn_data.push(parseInt(d.tempn));
+                        x_data.push(d.fctime);
+                        var tr = document.createElement('tr');
+                        tr.style="border:2px solid black;border-collapse:collapse;";
+
+                        var td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.cityname;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.temp;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.tempn;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.weather;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.wd;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.ws;
+                        tr.appendChild(td);
+
+                        td = document.createElement('td');
+                        td.style="border:2px solid black;border-collapse:collapse;";
+                        td.innerHTML = d.fctime;
+                        tr.appendChild(td);
+
+                        datatable.appendChild(tr);
+                    }
+
+                    var chart = Highcharts.chart('container', {
+                        chart: {
+                            type: 'spline'
+                        },
+                        title: {
+                            text: '气温'
+                        },
+                        subtitle: {
+                            text: '数据来源'
+                        },
+                        xAxis: {
+                            categories: x_data
+                        },
+                        yAxis: {
+                            title: {
+                                text: '气温 (°C)'
+                            }
+                        },
+                        plotOptions: {
+                            line: {
+                                dataLabels: {
+                                    // 开启数据标签
+                                    enabled: true
+                                },
+                                // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                                enableMouseTracking: false
+                            }
+                        },
+                        series: [{
+                            name: '最高温',
+                            data: temp_data
+                        }, {
+                            name: '最低温',
+                            data: tempn_data
+                        }]
+                    });
+                }, 'json');
+
+
+            });
+    </script>
+
+
+</body>
+
+</html>
